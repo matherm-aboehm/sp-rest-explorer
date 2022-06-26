@@ -16,14 +16,26 @@ import { Route } from 'vue-router'
 import TopHeaderLine from './TopHeaderLine.vue'
 import { consts } from '../../services/consts'
 
+interface Data {
+  linkActive: string | null
+}
+
 export default Vue.extend({
   components: {
     'top-line': TopHeaderLine
   },
-  data() {
+  data(): Data {
     return {
       linkActive: null
     }
+  },
+  watch: {
+    $route(to: Route): void {
+      this.setLink(to)
+    }
+  },
+  mounted() {
+    this.setLink(this.$route)
   },
   methods: {
     setLink(to: Route) {
@@ -32,14 +44,6 @@ export default Vue.extend({
       } else {
         this.linkActive = ''
       }
-    }
-  },
-  mounted() {
-    this.setLink(this.$route)
-  },
-  watch: {
-    $route(to: Route): void {
-      this.setLink(to)
     }
   }
 })

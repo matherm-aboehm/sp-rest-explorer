@@ -7,9 +7,17 @@ const sourceMapEnabled = isProduction
   : config.dev.cssSourceMap
 
 module.exports = {
-  loaders: utils.cssLoaders({
+  loaders: Object.assign({}, utils.cssLoaders({
     sourceMap: sourceMapEnabled,
     extract: isProduction
+  }), {
+    ts: {
+      loader: 'ts-loader',
+      options: {
+        appendTsSuffixTo: ['\\.vue$'], // will be JSON stringified, so can't store direct RegEx here
+        transpileOnly: true
+      }
+    }
   }),
   cssSourceMap: sourceMapEnabled,
   cacheBusting: config.dev.cacheBusting,

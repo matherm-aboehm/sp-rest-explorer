@@ -1,4 +1,4 @@
 export interface NavigationProperty {
-  typeName: string
+  typeName?: string
   name: string
 }

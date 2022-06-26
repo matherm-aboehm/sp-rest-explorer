@@ -43,7 +43,18 @@ interface Data {
   activeName: string
 }
 
-export default Vue.extend({
+interface Props {
+  monthKey: string
+}
+
+// TypeScript always had some issues with Vue's type inference in method overloading,
+// so use the generic parameters explicitly here, e.g. see:
+// https://github.com/vuejs/vue/issues/6841
+// https://github.com/vuejs/vue/pull/6856
+// https://github.com/vuejs/vue/issues/7640
+// In this special case, it ignores the 'data' and 'props' properties in the options parameter for extend() and 
+// there are no other properties defined here, where it could infere its generic parameters and use the right overload.
+export default Vue.extend<Data, {}, {}, Props>({
   data(): Data {
     return {
       values: [],

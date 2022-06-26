@@ -70,7 +70,7 @@ export class DocLinks {
     return false
   }
 
-  public static getLink(path: string): DocLink {
+  public static getLink(path: string): DocLink | null {
     for (const link of this.links) {
       for (const regexp of link.templateUrl) {
         if (regexp.test(path)) {

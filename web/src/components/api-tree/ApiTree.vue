@@ -132,8 +132,8 @@ export default Vue.extend({
         behavior: 'auto',
         block: 'center'
       })
-      element.parentElement.parentElement.classList.add('is-current')
-      element.parentElement.parentElement.focus()
+      element.parentElement!.parentElement!.classList.add('is-current')
+      element.parentElement!.parentElement!.focus()
     }
   },
   watch: {

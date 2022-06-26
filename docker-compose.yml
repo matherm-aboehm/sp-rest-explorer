@@ -1,0 +1,71 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: az-funcs/.devcontainer
+      dockerfile: Dockerfile
+      args:
+        # On Linux, you may need to update USER_UID and USER_GID below if not your local UID is not 1000.
+        #USER_UID: 10000
+        #USER_GID: 10000
+        # Update 'VARIANT' to pick a Node.js version: 14, 16
+        VARIANT: 14
+
+    init: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - .:/workspaces:cached
+
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+
+    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
+    network_mode: service:storage
+
+    # Uncomment the next line to use a non-root user for all processes.
+    user: node
+
+  web:
+    build:
+      context: web/.devcontainer
+      dockerfile: Dockerfile
+      args:
+        # On Linux, you may need to update USER_UID and USER_GID below if not your local UID is not 1000.
+        #USER_UID: 10000
+        #USER_GID: 10000
+        # Update 'VARIANT' to pick a Node version: 16, 14, 12.
+        # Append -bullseye or -buster to pin to an OS version.
+        # Use -bullseye variants on local on arm64/Apple Silicon.
+        VARIANT: 14
+
+    init: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - .:/workspaces:cached
+
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+
+    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
+    network_mode: service:storage
+
+    # Uncomment the next line to use a non-root user for all processes.
+    user: node
+
+  # run azurite and expose the relevant ports
+  storage:
+    container_name: azurite
+    image: mcr.microsoft.com/azure-storage/azurite:latest
+    restart: unless-stopped
+    volumes:
+    - storage-data:/data
+    # Add "forwardPorts": ["10000", "10001", "10002"] to **devcontainer.json** to forward Azurite locally.
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
+    #ports:
+    #  - '10000:10000'
+    #  - '10001:10001'
+    #  - '10002:10002'
+
+volumes:
+  storage-data:

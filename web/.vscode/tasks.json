@@ -1,0 +1,29 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "eslint",
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"label": "eslint: lint whole folder"
+		},
+		{
+			"type": "npm",
+			"script": "lint",
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"label": "npm: lint",
+			"detail": "eslint -c .eslintrc.json --ext .ts,.tsx,.js,.jsx ./src/**/*.{ts,tsx,js,jsx}"
+		},
+		{
+			"type": "npm",
+			"script": "dev",
+            "isBackground": true,
+			"problemMatcher": ["$ts-webpack-watch", "$ts-checker-webpack-watch","$ts-checker-eslint-webpack-watch"],
+			"label": "npm: dev",
+			"detail": "webpack-dev-server --progress --config build/webpack.dev.conf.js"
+		}
+	]
+}

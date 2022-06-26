@@ -36,11 +36,11 @@ export default Vue.extend({
     propName: String
   },
   computed: {
-    entity(): Entity {
+    entity(): Entity | null {
       if (this.typeName && this.propName) {
         let parser = new MetadataParser(Api.getMetadata([]))
         let entity = parser.getEntity(this.typeName)
-        return parser.getEntity(parser.getProperty(entity, this.propName).typeName)
+        return parser.getEntity(parser.getProperty(entity, this.propName)!.typeName)
       }
       if (this.typeName) {
         let parser = new MetadataParser(Api.getMetadata([]))
@@ -49,7 +49,7 @@ export default Vue.extend({
       if (this.apiPath) {
         let parser = new MetadataParser(Api.getMetadata([]))
         let object = parser.getObjectByPath(this.apiPath)
-        if (!parser.isFunctionImport(object)) {
+        if (object && !parser.isFunctionImport(object)) {
           return object
         }
       }

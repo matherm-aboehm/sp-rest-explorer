@@ -1,0 +1,8 @@
+{
+    "files.eol": "\n",
+    "vscode-wds.configFileName": "build/webpack.dev.conf.js",
+    "typescript.tsserver.log": "terse",
+    "eslint.debug": true,
+    "eslint.useESLintClass": true,
+    "eslint.trace.server": "off"
+}

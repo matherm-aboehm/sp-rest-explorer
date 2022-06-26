@@ -10,12 +10,15 @@ import { ObjectHelper } from './objectHelper'
 export class MetadataParser {
   constructor(private metadata: Metadata) {}
 
-  public getObjectByPath(path: string): FunctionImport | Entity {
+  public getObjectByPath(path: string): FunctionImport | Entity | null {
     let objects = path.split('/')
     let firstFunc = this.getFirstObject(path)
 
     if (objects.length === 1) {
       return firstFunc
+    }
+    if (firstFunc === null) {
+      return null
     }
 
     objects = objects.splice(1)
@@ -58,9 +61,12 @@ export class MetadataParser {
     return [...ObjectHelper.clone(entities), ...ObjectHelper.clone(collections)]
   }
 
-  public buildUriTemplate(path: string): string {
+  public buildUriTemplate(path: string): string | null {
     let objects = path.split('/')
     let firstFunc = this.getFirstObject(path)
+    if (firstFunc === null) {
+      return null
+    }
     let basePath = this.getFuncTemplateString(firstFunc)
 
     if (objects.length === 1) {
@@ -83,7 +89,7 @@ export class MetadataParser {
     return basePath
   }
 
-  public getFunction(entity: Entity, name: string): FunctionImport {
+  public getFunction(entity: Entity, name: string): FunctionImport | null {
     for (const func of entity.functions) {
       if (func.name === name) {
         return func
@@ -105,7 +111,7 @@ export class MetadataParser {
     return entity
   }
 
-  public getProperty(entity: Entity, prop: string): Property {
+  public getProperty(entity: Entity, prop: string): Property | null {
     for (const property of entity.properties) {
       if (property.name === prop) {
         return property
@@ -150,10 +156,10 @@ export class MetadataParser {
     return true
   }
 
-  private getFirstObject(path: string): FunctionImport {
+  private getFirstObject(path: string): FunctionImport | null {
     let objects = path.split('/')
     let firstFuncName = objects[0]
-    let firstFunc: FunctionImport = null
+    let firstFunc: FunctionImport | null = null
 
     for (const funcName in this.metadata.functions) {
       if (this.metadata.functions.hasOwnProperty(funcName)) {
@@ -177,7 +183,7 @@ export class MetadataParser {
       if (returnType.navigationProperties) {
         for (const prop of returnType.navigationProperties) {
           if (prop.name === propertyName) {
-            return this.metadata.entities[prop.typeName]
+            return this.metadata.entities[prop.typeName!]
           }
         }
       }
@@ -192,7 +198,7 @@ export class MetadataParser {
       if (currentObject.navigationProperties) {
         for (const prop of currentObject.navigationProperties) {
           if (prop.name === propertyName) {
-            return this.metadata.entities[prop.typeName]
+            return this.metadata.entities[prop.typeName!]
           }
         }
       }
@@ -204,5 +210,7 @@ export class MetadataParser {
         }
       }
     }
+    throw Error(
+      'property or function not found with name "' + propertyName + '"')
   }
 }

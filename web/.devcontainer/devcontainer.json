@@ -1,0 +1,39 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.205.2/containers/typescript-node
+{
+	"name": "Node.js & TypeScript",
+	"dockerComposeFile": "../../docker-compose.yml",
+	"service": "web",
+
+	// Set *default* container specific settings.json values on container create.
+	"settings": {
+		"typescript.tsserver.log": "off"
+	},
+
+	// Add the IDs of extensions you want installed when the container is created.
+	"extensions": [
+		"dbaeumer.vscode-eslint",
+		"ms-azuretools.vscode-azurestorage",
+		"octref.vetur",
+		"0xorial.webpack-dev-server"
+	],
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": /*"yarn install"*/ "sudo chmod 660 /var/run/docker.sock && sudo chgrp docker /var/run/docker.sock",
+	
+	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	"remoteUser": "node",
+	"updateRemoteUserUID": true,
+	"features": {
+		"azure-cli": "latest"
+	},
+	//"mounts": [
+		//"source=/usr/local/bin/docker,target=/usr/bin/docker,type=bind",
+	//	"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+	//]
+	//"runArgs": [ "--group-add", "0", "--privileged" ]
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}"
+}

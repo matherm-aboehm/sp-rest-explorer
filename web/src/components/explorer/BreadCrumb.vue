@@ -29,7 +29,7 @@ export default Vue.extend({
       return DocLinks.hasLink(this.path)
     },
     info(): DocLink {
-      return DocLinks.getLink(this.path)
+      return DocLinks.getLink(this.path)!
     }
   }
 })

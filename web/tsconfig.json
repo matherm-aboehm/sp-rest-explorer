@@ -6,12 +6,17 @@
         "moduleResolution": "node",
         "target": "es5",
         "skipLibCheck": true,
-        "strictNullChecks": false,
+        "strictNullChecks": true,
+        "forceConsistentCasingInFileNames": true,
+        "importHelpers": true,
         "lib": [
             "es5", "es2015", "dom"
         ]
     },
     "include": [
         "./src/**/*"
+    ],
+    "exclude": [
+        "node_modules"
     ]
 }

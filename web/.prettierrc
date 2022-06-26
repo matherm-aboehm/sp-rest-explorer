@@ -1,4 +1,18 @@
 {
+    "arrowParens": "avoid",
+    "endOfLine": "auto",
+    "tabWidth": 2,
+    "jsxSingleQuote": true,
     "semi": false,
-    "singleQuote": true
+    "singleQuote": true,
+    "trailingComma": "none",
+    "overrides": [
+        {
+            "files": "*.d.ts",
+            "options": {
+                "singleQuote": false,
+                "semi": true
+            }
+        }
+    ]
 }

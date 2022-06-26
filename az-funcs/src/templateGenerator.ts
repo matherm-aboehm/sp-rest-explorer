@@ -26,61 +26,63 @@ export class TemplateGenerator {
       functions: []
     }
 
-    for (const name in diffJson.entities) {
-      if (diffJson.entities.hasOwnProperty(name)) {
-        const entity = diffJson.entities[name]
+    if (diffJson !== undefined) {
+      for (const name in diffJson.entities) {
+        if (diffJson.entities.hasOwnProperty(name)) {
+          const entity = diffJson.entities[name]
 
-        let entityChange: DiffEntity = {
-          properties: [],
-          navigationProperties: [],
-          functionIds: [],
-          changeType: undefined,
-          name: name
-        }
-
-        if (entity instanceof Array) {                         // entity was added or deleted
-          entityChange.changeType = this.detectChangeType(entity)
-
-          if (entityChange.changeType === ChangeType.Add) {
-            let addedEntity = entity[0]
-            this.copyAddedProperties('properties', addedEntity, entityChange)
-            this.copyAddedProperties('navigationProperties', addedEntity, entityChange)
-            this.copyAddedProperties('functionIds', addedEntity, entityChange)
+          let entityChange: DiffEntity = {
+            properties: [],
+            navigationProperties: [],
+            functionIds: [],
+            changeType: undefined,
+            name: name
           }
-        } else {                                               // properties inside entity were updated
-          entityChange.changeType = ChangeType.Update
 
-          this.populateChildProperties(entity, entityChange, this.PropertiesKey)
-          this.populateChildProperties(entity, entityChange, this.NavigationPropertiesKey)
-          this.populateChildProperties(entity, entityChange, this.FunctionIdsKey)
+          if (entity instanceof Array) {                         // entity was added or deleted
+            entityChange.changeType = this.detectChangeType(entity)
 
+            if (entityChange.changeType === ChangeType.Add) {
+              let addedEntity = entity[0]
+              this.copyAddedProperties('properties', addedEntity, entityChange)
+              this.copyAddedProperties('navigationProperties', addedEntity, entityChange)
+              this.copyAddedProperties('functionIds', addedEntity, entityChange)
+            }
+          } else {                                               // properties inside entity were updated
+            entityChange.changeType = ChangeType.Update
+
+            this.populateChildProperties(entity, entityChange, this.PropertiesKey)
+            this.populateChildProperties(entity, entityChange, this.NavigationPropertiesKey)
+            this.populateChildProperties(entity, entityChange, this.FunctionIdsKey)
+
+          }
+
+          diffChanges.entities.push(entityChange)
+        }
+      }
+
+      for (const name in diffJson.functions) {
+        if (!name.startsWith('_is_root_')) continue
+
+        const func = diffJson.functions[name]
+
+        if (!(func instanceof Array)) continue // do not detect changes in function properties, only detect add\delete
+        let funcDiff: DiffFunction = {
+          changeType: this.detectChangeType(func),
+          name: func[0].name,
+          returnType: func[0].returnType
         }
 
-        diffChanges.entities.push(entityChange)
+        diffChanges.functions.push(funcDiff)
       }
-    }
-
-    for (const name in diffJson.functions) {
-      if (!name.startsWith('_is_root_')) continue
-
-      const func = diffJson.functions[name]
-
-      if (!(func instanceof Array)) continue // do not detect changes in function properties, only detect add\delete
-      let funcDiff: DiffFunction = {
-        changeType: this.detectChangeType(func),
-        name: func[0].name,
-        returnType: func[0].returnType
-      }
-
-      diffChanges.functions.push(funcDiff)
     }
 
     diffChanges.entities = diffChanges.entities.sort((a: DiffEntity, b: DiffEntity) => {
-      return a.name.localeCompare(b.name)
+      return a.name && b.name ? a.name.localeCompare(b.name) : (a.name ? 1 : (b.name ? -1 : 0))
     })
 
     diffChanges.functions = diffChanges.functions.sort((a: DiffFunction, b: DiffFunction) => {
-      return a.name.localeCompare(b.name)
+      return a.name && b.name ? a.name.localeCompare(b.name) : (a.name ? 1 : (b.name ? -1 : 0))
     })
 
     let html = template({
@@ -106,8 +108,8 @@ export class TemplateGenerator {
 
   private populateChildProperties(entity: any, diffEntity: DiffEntity, propName: string): void {
     if (entity.hasOwnProperty(propName)
-            && typeof entity[propName] === 'object'
-            && entity[propName]['_t'] === 'a') {                // has property changes
+      && typeof entity[propName] === 'object'
+      && entity[propName]['_t'] === 'a') {                // has property changes
 
       for (const indx in entity[propName]) {
         if (entity[propName].hasOwnProperty(indx) && indx !== '_t') {

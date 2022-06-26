@@ -15,9 +15,11 @@ const VueAxios = require('vue-axios')
 import './sass/main.scss'
 
 if (process.env.NODE_ENV === 'production') {
-  AppInsights.downloadAndSetup({
-    instrumentationKey: '88b60418-430f-416c-b4c3-dc4392385c3b'
-  })
+  if (AppInsights.downloadAndSetup !== undefined) {
+    AppInsights.downloadAndSetup({
+      instrumentationKey: '88b60418-430f-416c-b4c3-dc4392385c3b'
+    })
+  }
   AppInsights.trackPageView()
 }
 
@@ -26,6 +28,7 @@ Vue.use(VueAxios, axios)
 Vue.config.productionTip = false
 
 // tslint:disable-next-line:no-unused-expression
+// eslint-disable-next-line no-new
 new Vue({
   el: '#app',
   router,

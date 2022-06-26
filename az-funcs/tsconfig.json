@@ -7,7 +7,9 @@
     "noImplicitAny": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "suppressImplicitAnyIndexErrors": true
+    "suppressImplicitAnyIndexErrors": true,
+    "importHelpers": true,
+    "strict": true
   },
   "include": [
     "GenerateMetadata",

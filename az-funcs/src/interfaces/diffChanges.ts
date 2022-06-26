@@ -4,7 +4,7 @@ export interface DiffChanges {
 }
 
 export interface DiffEntity {
-  changeType: ChangeType,
+  changeType?: ChangeType,
   name?: string,
   properties?: {
     changeType: ChangeType,

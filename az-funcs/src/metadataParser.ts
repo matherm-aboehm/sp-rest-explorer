@@ -93,7 +93,7 @@ export class MetadataParser {
     }
   }
 
-  private ensureCollectionEntityType(typeName: string, entities: { [key: string]: EntityType }): void {
+  private ensureCollectionEntityType(typeName: string | undefined, entities: { [key: string]: EntityType }): void {
     if (typeName && typeName.indexOf('Collection') === 0 && !entities[typeName]) {
       entities[typeName] = {
         fullName: typeName,
@@ -123,7 +123,7 @@ export class MetadataParser {
     }
   }
 
-  private getThisParameter(func: FunctionImport): string {
+  private getThisParameter(func: FunctionImport): string | null {
     let param = func.parameters.filter(f => f.name === 'this')[0]
 
     if (param) {
@@ -231,7 +231,7 @@ export class MetadataParser {
           let association = this.associations.get(name)
 
           entityType.navigationProperties.push({
-            typeName: association.roles[toRole],
+            typeName: association ? association.roles[toRole] : undefined,
             name: navigationProperty.$.Name
           })
         }

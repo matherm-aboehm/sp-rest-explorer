@@ -7,7 +7,15 @@
         },
         "**/*.map": {
             "when": "$(basename).map"
-        }
+        },
+        "obj": true,
+        "bin": true
     },
-    "files.autoSave": "onFocusChange"
+    "files.autoSave": "onFocusChange",
+    "azureFunctions.deploySubpath": ".",
+    "azureFunctions.projectLanguage": "TypeScript",
+    "azureFunctions.projectRuntime": "~2",
+    "debug.internalConsoleOptions": "neverOpen",
+    "azureFunctions.preDeployTask": "func: extensions install",
+    "cmake.configureOnOpen": false
 }

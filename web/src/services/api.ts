@@ -68,8 +68,12 @@ export class Api {
   }
 
   public static fetchMetaData(): Promise<Metadata> {
+    if (jsonUrl === undefined) {
+      return Promise.reject(Error('jsonUrl is null'))
+    }
+
     return axios.get(jsonUrl).then(result => {
-      let apiMetadata: Metadata = JSON.parse(decompressFromUTF16(result.data))
+      let apiMetadata: Metadata = JSON.parse(decompressFromUTF16(result.data)!)
       this.apiMetadata = apiMetadata
       return apiMetadata
     })

@@ -2,28 +2,27 @@
   <div id="app">
     <app-header></app-header>
     <router-view v-if="loaded" />
-    <div
-      v-if="!loaded"
-      class="loading"
-      v-loading="loading"
-    ></div>
+    <div v-if="!loaded" v-loading="loading" class="loading"></div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import ElementUI from 'element-ui'
-const locale = require('element-ui/lib/locale/lang/en')
 import 'element-ui/lib/theme-chalk/index.css'
 
 import AppHeader from '@/components/header/AppHeader.vue'
 import { Api } from './services/api'
 import { uiTypes } from './store/modules/ui'
 import { Logger } from './services/logger'
+const locale = require('element-ui/lib/locale/lang/en')
 
 Vue.use(ElementUI, { locale })
 
 export default Vue.extend({
+  components: {
+    'app-header': AppHeader
+  },
   data() {
     return {
       loaded: false
@@ -33,9 +32,6 @@ export default Vue.extend({
     loading(): boolean {
       return this.$store.state.ui.dataLoading
     }
-  },
-  components: {
-    'app-header': AppHeader
   },
   mounted() {
     Api.loadChangesJson()

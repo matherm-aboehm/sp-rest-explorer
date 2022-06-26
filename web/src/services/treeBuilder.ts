@@ -34,20 +34,20 @@ export class TreeBuilder {
 
   public getChildren(currentNode: TreeNode): TreeNode[] {
     let results: TreeNode[] = []
-    let entity = this.metadata.entities[currentNode.fullTypeName]
+    let entity = this.metadata.entities[currentNode.fullTypeName!]
 
     if (entity.navigationProperties) {
       entity.navigationProperties.forEach(prop => {
         let node: TreeNode = {
           label: prop.name,
           children: [],
-          fullTypeName: prop.typeName,
+          fullTypeName: prop.typeName!,
           path: currentNode.path + consts.pathSeparator + prop.name,
           leaf: true,
           type: TreeNodeType.Entity
         }
 
-        let entity = this.metadata.entities[prop.typeName]
+        let entity = this.metadata.entities[prop.typeName!]
         node.leaf = !this.hasChilds(entity)
 
         results.push(node)

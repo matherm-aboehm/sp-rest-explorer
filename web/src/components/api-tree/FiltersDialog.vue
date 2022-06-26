@@ -34,8 +34,17 @@ import Vue from 'vue'
 import { filterTypes } from '../../store/modules/filters'
 import { FilterManager } from '../../services/filterManager'
 
+interface Data {
+  dialogVisible: boolean,
+  selectedFilters: string[]
+  allFilters: string[]
+  isIndeterminate: boolean
+  checkAll: boolean
+  rows: number
+}
+
 export default Vue.extend({
-  data() {
+  data(): Data {
     return {
       dialogVisible: false,
       selectedFilters: [],

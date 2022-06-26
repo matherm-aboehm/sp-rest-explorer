@@ -27,7 +27,7 @@ export default Vue.extend({
     'doc-link': DocLink
   },
   computed: {
-    func(): FunctionImport {
+    func(): FunctionImport | null {
       if (this.typeName) {
         let parser = new MetadataParser(Api.getMetadata([]))
         let entity = parser.getEntity(this.typeName)
@@ -36,15 +36,15 @@ export default Vue.extend({
       if (this.apiPath) {
         let parser = new MetadataParser(Api.getMetadata([]))
         let object = parser.getObjectByPath(this.apiPath)
-        if (parser.isFunctionImport(object)) {
+        if (object && parser.isFunctionImport(object)) {
           return object
         }
       }
       return null
     },
-    entityName(): string {
-      if (this.func.parameters[0].name === 'this') {
-        return this.func.parameters[0].typeName
+    entityName(): string | undefined {
+      if (this.func && this.func.parameters[0].name === 'this') {
+        return this.func!.parameters[0].typeName
       }
     },
     hasParentEntity(): boolean {

@@ -22,6 +22,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { VueConstructor } from 'vue/types/vue'
 
 import DocLink from './DocLink.vue'
 import { toggleTableMixin } from '../../../mixins'
@@ -30,7 +31,7 @@ export default Vue.extend({
   components: {
     'doc-link': DocLink
   },
-  mixins: [toggleTableMixin],
+  mixins: [toggleTableMixin as VueConstructor],
   props: {
     properties: Array,
     title: String
